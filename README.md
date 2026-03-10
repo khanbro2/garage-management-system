@@ -1,38 +1,42 @@
 # Garage Management System
 
-A SaaS-based Garage Management System built with Laravel.
+Private development repository for my **Garage Management SaaS project** built with Laravel.
 
-## Features
-- Multi-tenant garage management
-- Customer management
-- Vehicle records
-- MOT reminders
-- Service history
-- Invoice generation
-- Automated notifications
+## Overview
+
+This project is a multi-tenant system designed to manage automotive garage operations including customers, vehicles, service records, and invoices.
+
+## Core Modules
+
+* Customer Management
+* Vehicle Management
+* Service Records
+* MOT Tracking
+* Invoice Management
+* Multi-Tenant Garage Accounts
 
 ## Tech Stack
-- Laravel 11
-- MySQL
-- Bootstrap
-- JavaScript
 
-## Installation
+* Laravel
+* PHP
+* MySQL
+* Bootstrap
+* JavaScript
 
-1. Clone repository
-git clone https://github.com/khanbro2/garage-management-system.git
+## Purpose
 
-2. Install dependencies
-composer install
+This repository is used for:
 
-3. Copy env file
-cp .env.example .env
+* Personal development
+* Feature experimentation
+* SaaS architecture testing
+* Code backup and version control
 
-4. Generate key
-php artisan key:generate
+## Notes
 
-5. Run migrations
-php artisan migrate
+* Project is under continuous development.
+* Some modules may change during development.
 
-6. Start server
-php artisan serve
+## Author
+
+Talha Khan
