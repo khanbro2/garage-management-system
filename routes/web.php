@@ -43,7 +43,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('superadm
             'active_subscriptions' => \App\Models\GarageSubscription::where('status', 'active')->where('ends_at', '>', now())->count(), // Uses 'status'
             'expired_subscriptions' => \App\Models\GarageSubscription::where('ends_at', '<', now())->count(),
         ];
-        return view('superadmin.dashboard', compact('stats'));
+        return view('super-admin.dashboard', compact('stats'));
     })->name('dashboard');
 
     // Garages - SINGLE RESOURCE ROUTE

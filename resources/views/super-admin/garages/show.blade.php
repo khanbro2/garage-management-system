@@ -18,15 +18,15 @@
 <div class="row">
     <div class="col-md-8">
         {{-- Garage Info Card --}}
-        <div class="card mb-4">
-            <div class="card-header">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-light">
                 <h5 class="mb-0">Garage Information</h5>
             </div>
             <div class="card-body">
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="text-muted small">Email</label>
-                        <p class="mb-1">{{ $garage->email }}</p>
+                        <p class="mb-1 fw-bold">{{ $garage->email }}</p>
                     </div>
                     <div class="col-md-6">
                         <label class="text-muted small">Phone</label>
@@ -41,7 +41,8 @@
                     <div class="col-md-6">
                         <label class="text-muted small">Status</label>
                         <p class="mb-1">
-                            @if($garage->is_active)
+                            {{-- Corrected to use the method from your Model --}}
+                            @if($garage->isActive())
                                 <span class="badge bg-success">Active</span>
                             @else
                                 <span class="badge bg-secondary">Inactive</span>
@@ -59,8 +60,8 @@
         </div>
 
         {{-- Owner Info --}}
-        <div class="card mb-4">
-            <div class="card-header">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-light">
                 <h5 class="mb-0">Owner Details</h5>
             </div>
             <div class="card-body">
@@ -81,58 +82,43 @@
             </div>
         </div>
 
-        {{-- Recent Activity --}}
-        <div class="card">
-            <div class="card-header">
+        {{-- Activity Log Placeholder --}}
+        <div class="card shadow-sm">
+            <div class="card-header bg-light">
                 <h5 class="mb-0">Recent Activity</h5>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Action</th>
-                                <th>User</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{-- Add activity log here if you have it --}}
-                            <tr>
-                                <td colspan="3" class="text-center text-muted">Activity log coming soon</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="card-body text-center py-4">
+                <p class="text-muted mb-0 italic">Activity log coming soon</p>
             </div>
         </div>
     </div>
 
     <div class="col-md-4">
         {{-- Subscription Status --}}
-        <div class="card mb-4">
+        <div class="card mb-4 shadow-sm border-primary">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Subscription</h5>
+                <h5 class="mb-0">Subscription Plan</h5>
             </div>
             <div class="card-body">
-                @if($garage->activeSubscription)
-                    <h4 class="card-title">{{ $garage->activeSubscription->plan->name }}</h4>
+                {{-- Corrected to match your Model relationship name --}}
+                @if($garage->currentSubscription)
+                    <h4 class="card-title text-primary">{{ $garage->currentSubscription->plan->name }}</h4>
                     <p class="card-text">
-                        <span class="badge bg-success">Active</span>
+                        <span class="badge bg-success">Active Plan</span>
                     </p>
-                    <ul class="list-unstyled small">
-                        <li><strong>Started:</strong> {{ $garage->activeSubscription->starts_at->format('d M Y') }}</li>
-                        <li><strong>Expires:</strong> {{ $garage->activeSubscription->ends_at?->format('d M Y') ?? 'Never' }}</li>
-                        <li><strong>Price:</strong> £{{ number_format($garage->activeSubscription->plan->price, 2) }}/{{ $garage->activeSubscription->plan->billing_interval }}</li>
+                    <ul class="list-unstyled small border-top pt-2">
+                        <li class="mb-1"><strong>Started:</strong> {{ $garage->currentSubscription->starts_at->format('d M Y') }}</li>
+                        <li class="mb-1"><strong>Expires:</strong> {{ $garage->currentSubscription->ends_at->format('d M Y') }}</li>
+                        <li class="mb-1"><strong>Billing:</strong> <span class="text-capitalize">{{ $garage->currentSubscription->billing_cycle }}</span></li>
                     </ul>
-                    <a href="{{ route('superadmin.subscriptions.edit', $garage->activeSubscription) }}" class="btn btn-outline-primary btn-sm w-100">
+                    <a href="{{ route('superadmin.subscriptions.edit', $garage->currentSubscription) }}" class="btn btn-outline-primary btn-sm w-100 mt-2">
                         Manage Subscription
                     </a>
                 @else
                     <div class="text-center py-3">
-                        <i class="bi bi-exclamation-circle text-warning fs-1"></i>
-                        <p class="text-muted mt-2">No active subscription</p>
-                        <a href="{{ route('superadmin.subscriptions.create', ['garage_id' => $garage->id]) }}" class="btn btn-success btn-sm">
+                        <i class="bi bi-exclamation-triangle text-warning fs-1"></i>
+                        <p class="text-muted mt-2">No active subscription found.</p>
+                        <a href="{{ route('superadmin.subscriptions.create', ['garage_id' => $garage->id]) }}" class="btn btn-success btn-sm w-100">
                             Assign Subscription Plan
                         </a>
                     </div>
@@ -141,8 +127,8 @@
         </div>
 
         {{-- Quick Stats --}}
-        <div class="card mb-4">
-            <div class="card-header">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-light">
                 <h5 class="mb-0">Statistics</h5>
             </div>
             <div class="list-group list-group-flush">
@@ -158,21 +144,17 @@
                     Staff Members
                     <span class="badge bg-primary rounded-pill">{{ $stats['staff'] ?? 0 }}</span>
                 </div>
-                <div class="list-group-item d-flex justify-content-between align-items-center">
-                    MOT Checks (30 days)
-                    <span class="badge bg-info rounded-pill">{{ $stats['recent_mots'] ?? 0 }}</span>
-                </div>
             </div>
         </div>
 
         {{-- Danger Zone --}}
-        <div class="card border-danger">
+        <div class="card border-danger shadow-sm">
             <div class="card-header bg-danger text-white">
                 <h5 class="mb-0">Danger Zone</h5>
             </div>
             <div class="card-body">
-                <p class="small text-muted">Deleting this garage will remove all associated data including customers, vehicles, and service records.</p>
-                <form action="{{ route('superadmin.garages.destroy', $garage) }}" method="POST" onsubmit="return confirm('WARNING: This will permanently delete {{ $garage->name }} and ALL associated data. Are you absolutely sure?');">
+                <p class="small text-muted">Permanently remove this garage and all its data.</p>
+                <form action="{{ route('superadmin.garages.destroy', $garage) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this garage?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-outline-danger btn-sm w-100">

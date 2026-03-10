@@ -155,31 +155,25 @@
     </div>
 
     <div class="col-md-4">
-        {{-- Current Status Card --}}
-        <div class="card mb-4">
-            <div class="card-header {{ $subscription->is_active ? 'bg-success' : 'bg-secondary' }} text-white">
-                <h5 class="mb-0">Current Status</h5>
-            </div>
-            <div class="card-body text-center">
-                @if($subscription->is_active)
-                    <i class="bi bi-check-circle-fill text-success fs-1"></i>
-                    <h5 class="mt-2">Active</h5>
-                    @if($subscription->onTrial())
-                        <span class="badge bg-info">Trial Period</span>
-                        <p class="small text-muted mt-2">Trial ends {{ $subscription->trial_ends_at->diffForHumans() }}</p>
-                    @elseif($subscription->onGracePeriod())
-                        <span class="badge bg-warning">Grace Period</span>
-                        <p class="small text-muted mt-2">Cancels {{ $subscription->ends_at->diffForHumans() }}</p>
-                    @endif
-                @else
-                    <i class="bi bi-x-circle-fill text-secondary fs-1"></i>
-                    <h5 class="mt-2">Inactive</h5>
-                    @if($subscription->ends_at)
-                        <p class="small text-muted">Ended on {{ $subscription->ends_at->format('d M Y') }}</p>
-                    @endif
-                @endif
-            </div>
-        </div>
+      {{-- Current Status Card --}}
+<div class="card mb-4">
+    {{-- Use the isActive() method from your model --}}
+    <div class="card-header {{ $subscription->status === 'active' ? 'bg-success' : 'bg-secondary' }} text-white">
+        <h5 class="mb-0">Current Status</h5>
+    </div>
+    <div class="card-body text-center">
+        @if($subscription->status === 'active')
+            <i class="bi bi-check-circle-fill text-success fs-1"></i>
+            <h5 class="mt-2">Active</h5>
+        @else
+            <i class="bi bi-x-circle-fill text-secondary fs-1"></i>
+            <h5 class="mt-2 text-capitalize">{{ $subscription->status }}</h5>
+            @if($subscription->ends_at)
+                <p class="small text-muted">Ended on {{ $subscription->ends_at->format('d M Y') }}</p>
+            @endif
+        @endif
+    </div>
+</div>
 
         {{-- Plan Details --}}
         <div class="card mb-4">

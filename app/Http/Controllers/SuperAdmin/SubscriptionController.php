@@ -39,9 +39,7 @@ class SubscriptionController extends Controller
 
     public function create()
     {
-        $garages = Garage::whereDoesntHave('subscriptions', function ($q) {
-            $q->where('status', 'active')->where('ends_at', '>', now());
-        })->get();
+        $garages = Garage::all();
 
         $plans = SubscriptionPlan::active()->get();
 
